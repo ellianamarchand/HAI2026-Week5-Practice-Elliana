@@ -180,11 +180,37 @@ def render_pending_approval():
     return approved, rejected
 
 def render_pending_feedback():
-    feedback = st.text_input(
+    submitted = False
+    feedback = ""
+    
+    st.markdown("**Quick Feedback Options:**")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("Fix Logic Error", use_container_width=True, key="quick_logic"):
+            submitted = True
+            feedback = "Fix the logic error in your approach. Reconsider the analysis method."
+    
+    with col2:
+        if st.button("Try Different Visualization", use_container_width=True, key="quick_viz"):
+            submitted = True
+            feedback = "Try using a different visualization approach or chart type."
+    
+    with col3:
+        if st.button("Make Answer Detailed", use_container_width=True, key="quick_detailed"):
+            submitted = True
+            feedback = "Provide a more detailed answer with additional analysis and insights."
+    
+    st.divider()
+    st.markdown("**Or provide custom feedback:**")
+    custom_feedback = st.text_input(
         "Why are you rejecting? Tell the agent what to do instead:",
         key="reject_feedback",
     )
-    submitted = st.button("Submit Rejection", use_container_width=True)
+    if st.button("Submit Custom Feedback", use_container_width=True, key="custom_submit"):
+        submitted = True
+        feedback = custom_feedback if custom_feedback else "Please try a different approach."
+    
     return submitted, feedback
 
 def render_panel():
